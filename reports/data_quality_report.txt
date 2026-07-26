@@ -1,0 +1,27 @@
+Data Quality Report
+
+Project Name: Mutual Fund Data Engineering Project
+Date: 26-07-2026
+
+1. Successfully loaded all 10 CSV files.
+
+2. Missing Values
+   - Checked all datasets.
+   - Missing values identified where applicable.
+
+3. Duplicate Records
+   - No duplicate records found.
+
+4. Data Types
+   - Verified the data types of all columns.
+
+5. AMFI Code Validation
+   - All AMFI codes in fund_master are available in nav_history.
+
+6. MFAPI Data
+   - Successfully fetched NAV data for the required AMFI codes.
+   - Saved the downloaded NAV data into the data/raw folder.
+
+7. Conclusion
+   - Data ingestion completed successfully.
+   - Datasets are ready for further analysis.
