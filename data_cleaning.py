@@ -46,54 +46,61 @@ transactions["transaction_date"] = pd.to_datetime(
     transactions["transaction_date"]
 )
 
-# Check result
-print(transactions.head())
+# Validate KYC Status
 bad = transactions[
     ~transactions["kyc_status"].isin(
         ["Verified", "Pending", "Rejected"]
     )
 ]
 
-print("Invalid KYC Status Records:")
+print("Invalid KYC records:")
 print(bad)
 
-# Save cleaned transactions
+# Save cleaned file
 transactions.to_csv(
     "Data/processed/08_investor_transactions.csv",
     index=False
 )
 
-print("Investor transactions saved successfully.")
+print("Investor transactions cleaned successfully.")
+
 performance = pd.read_csv("Data/raw/07_scheme_performance.csv")
 
 # Remove leading/trailing spaces from column names
 performance.columns = performance.columns.str.strip()
 
-# Check column names
-print(performance.columns)
+# Print all column names
+print(performance.columns.tolist())
 
-# View first rows
+# Print the first 5 rows
 print(performance.head())
-# Convert Returns to numeric
-performance["1Y Return"] = pd.to_numeric(
-    performance["1Y Return"],
+print(performance.columns.tolist())
+# Convert returns to numeric
+performance["return_1yr_pct"] = pd.to_numeric(
+    performance["return_1yr_pct"],
     errors="coerce"
 )
 
-performance["3Y Return"] = pd.to_numeric(
-    performance["3Y Return"],
+performance["return_3yr_pct"] = pd.to_numeric(
+    performance["return_3yr_pct"],
     errors="coerce"
 )
 
-performance["5Y Return"] = pd.to_numeric(
-    performance["5Y Return"],
+performance["return_5yr_pct"] = pd.to_numeric(
+    performance["return_5yr_pct"],
     errors="coerce"
 )
 
-# Validate Expense Ratio
+# Convert expense ratio to numeric
+performance["expense_ratio_pct"] = pd.to_numeric(
+    performance["expense_ratio_pct"],
+    errors="coerce"
+)
+
+# Validate expense ratio
 bad = performance[
-    (performance["expense_ratio"] < 0.1) |
-    (performance["expense_ratio"] > 2.5)
+    (performance["expense_ratio_pct"] < 0.1) |
+    (performance["expense_ratio_pct"] > 2.5)
 ]
 
 print("Invalid Expense Ratio Records:")
@@ -101,39 +108,43 @@ print(bad)
 
 # Save cleaned file
 performance.to_csv(
-    "Data/processed/07_scheme_performance.csv",
+    "Data/raw/07_scheme_performance.csv",
     index=False
 )
 
 print("Scheme Performance cleaned successfully.")
+# ==============================
+# STEP 8: Save All Cleaned Files
+# ==============================
+
 # Save Fund Master
 fund.to_csv(
-    "Data/processed/01_fund_master.csv",
+    "Data/raw/01_fund_master.csv",
     index=False
 )
 
 # Save NAV History
 nav.to_csv(
-    "Data/processed/02_nav_history.csv",
+    "Data/raw/02_nav_history.csv",
     index=False
 )
 
-# Save AUM by Fund House
+# Save AUM
 aum.to_csv(
-    "Data/processed/03_aum_by_fund_house.csv",
+    "Data/raw/03_aum_by_fund_house.csv",
     index=False
 )
 
 # Save Scheme Performance
 performance.to_csv(
-    "Data/processed/07_scheme_performance.csv",
+    "Data/raw/07_scheme_performance.csv",
     index=False
 )
 
 # Save Investor Transactions
 transactions.to_csv(
-    "Data/processed/08_investor_transactions.csv",
+    "Data/raw/08_investor_transactions.csv",
     index=False
 )
 
-print("All cleaned datasets have been saved successfully!")
+print("All cleaned datasets saved successfully!")
